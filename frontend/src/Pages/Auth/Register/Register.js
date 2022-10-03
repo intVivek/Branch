@@ -1,6 +1,7 @@
 import React,{useState} from "react";
 import {TextField, Button} from '@mui/material';
 import { register } from '../../../Services';
+import { toast } from 'react-toastify'
 
 const Register = () => {
     const [name, setName] = useState("");
@@ -14,11 +15,12 @@ const Register = () => {
         register({ name, email, pass })
         .then(res => {
             localStorage.setItem('user', JSON.stringify(res))
-            this.props.handleClose()
+            if(res.status==1) toast.success(res.message);
+            else toast.error(res.message);
             setLoading(false);
         })
         .catch(err => {
-            console.log(err);
+            toast.error("Some Error Occured");
             setError(true)
             setLoading(false);
         })
