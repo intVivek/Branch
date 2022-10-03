@@ -1,19 +1,38 @@
 import "./login.scss"
 import React,{useState} from "react";
 import {TextField, Button} from '@mui/material';
+import { login } from '../../../Services';
+import { toast } from 'react-toastify'
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
+    const [loading , setLoading] = useState(false);
+    const [error , setError] = useState(false);
+
+    const handleLogin = ()=>{
+        setLoading(true);
+        login({ email, pass })
+        .then(res => {
+            console.log(res)
+            localStorage.setItem('user', JSON.stringify(res))
+            toast.error(res.message);
+            setLoading(false);
+        })
+        .catch(err => {
+            toast.error("Some Error Occured");
+            console.log(err);
+            setError(true)
+            setLoading(false);
+        })
+    }
 
     return <div className="login">
         <div className="container">
-            <TextField fullWidth id="outlined-basic" onChange={e=>setEmail(e.target.value)} label="Email" variant="outlined" />
-            <TextField fullWidth id="outlined-basic" onChange={e=>setPass(e.target.value)} label="Password" variant="outlined" />
+            <TextField error={error} fullWidth id="outlined-basic" onChange={e=>setEmail(e.target.value)} label="Email" variant="outlined" />
+            <TextField error={error} fullWidth id="outlined-basic" onChange={e=>setPass(e.target.value)} label="Password" variant="outlined" />
         </div>
-        <Button bottom variant="contained" onClick={()=>{
-            console.log(email, pass);
-        }}>Login</Button>
+        <Button disabled={loading} variant="contained" onClick={handleLogin}>Login</Button>
     </div>;
 };
 
