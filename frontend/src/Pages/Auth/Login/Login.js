@@ -16,7 +16,8 @@ const Login = () => {
         .then(res => {
             console.log(res)
             localStorage.setItem('user', JSON.stringify(res))
-            toast.error(res.message);
+            if(res.status==1) toast.success(res.message);
+            else toast.error(res.message);
             setLoading(false);
         })
         .catch(err => {

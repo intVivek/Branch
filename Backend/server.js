@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 require("dotenv").config();
 const server = require('http').createServer(app);
-const {login} = require('./Routers');
+const {login, register} = require('./Routers');
 const mongoose = require("mongoose");
 
 app.use(express.urlencoded({ extended : false }));
@@ -25,6 +25,7 @@ app.use((req, res, next) => {
 });
 
 app.use(login);
+app.use(register);
 
 server.listen(process.env.PORT || 5000,()=>{
     console.log(`Server Started at port ${process.env.PORT}`);
