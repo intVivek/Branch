@@ -14,7 +14,7 @@ router.post('/register', async (req, res) => {
         user = await User.findOne({email});
         if (user) return res.json({status:0,message:'User already exists'});
         user = await User.create({ email, name, hashedPass: await bcrypt.hash(pass, 10)});
-        return res.json({status:1,message:'User created'});
+        return res.json({status:1,message:'User created',user:{name:user.name,email:user.email}});
     }
     catch(error){
         console.log(error);

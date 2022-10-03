@@ -2,7 +2,7 @@ import "./Auth.scss"
 import React,{useState} from "react";
 import Login from "./Login";
 import Register from "./Register";
-import {Box, Tabs, Tab, TabPanel} from '@mui/material';
+import {Tabs, Tab } from '@mui/material';
 
 const Auth = () => {
   const [tab, setTab] = useState(0);

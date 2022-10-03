@@ -24,20 +24,23 @@ const Register = () => {
             else toast.error(res.message);
             setLoading(false);
         })
-        .catch(err => {
+        .catch(e => {
+            console.log(e);
             toast.error("Some Error Occured");
             setError(true)
             setLoading(false);
         })
     }
-    return <div className="login">
-        <div className="container">
-            <TextField error={error} fullWidth id="outlined-basic" onChange={e=>setName(e.target.value)} label="UserName" variant="outlined" />
-            <TextField error={error} fullWidth id="outlined-basic" onChange={e=>setEmail(e.target.value)} label="Email" variant="outlined" />
-            <TextField error={error} fullWidth id="outlined-basic" onChange={e=>setPass(e.target.value)} label="Password" variant="outlined" />
+    return (
+        <div className="login">
+            <div className="container">
+                <TextField error={error} fullWidth id="outlined-basic" onChange={e=>setName(e.target.value)} label="UserName" variant="outlined" />
+                <TextField error={error} fullWidth id="outlined-basic" onChange={e=>setEmail(e.target.value)} label="Email" variant="outlined" />
+                <TextField error={error} fullWidth id="outlined-basic" onChange={e=>setPass(e.target.value)} label="Password" variant="outlined" />
+            </div>
+            <Button disabled={loading} bottom variant="contained" onClick={handleRegister}>Register</Button>
         </div>
-        <Button disabled={loading} bottom variant="contained" onClick={handleRegister}>Register</Button>
-    </div>;
+    );
 };
 
 export default Register;
