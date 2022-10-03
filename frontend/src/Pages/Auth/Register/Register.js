@@ -1,7 +1,8 @@
 import React,{useState} from "react";
 import {TextField, Button} from '@mui/material';
 import { register } from '../../../Services';
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
+import {useNavigate} from 'react-router-dom';
 
 const Register = () => {
     const [name, setName] = useState("");
@@ -9,13 +10,17 @@ const Register = () => {
     const [pass, setPass] = useState("");
     const [loading , setLoading] = useState(false);
     const [error , setError] = useState(false);
+    const navigate = useNavigate();
 
     const handleRegister = ()=>{
         setLoading(true);
         register({ name, email, pass })
         .then(res => {
             localStorage.setItem('user', JSON.stringify(res))
-            if(res.status==1) toast.success(res.message);
+            if(res.status==1) {
+                toast.success(res.message);
+                navigate('/dashboard');
+            }
             else toast.error(res.message);
             setLoading(false);
         })
