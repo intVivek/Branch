@@ -4,6 +4,7 @@ require("dotenv").config();
 const server = require('http').createServer(app);
 const {login, register} = require('./Routers');
 const mongoose = require("mongoose");
+const Message = require("./Model/Message");
 const io = require('socket.io')(server,{
   cors:
   {
@@ -21,7 +22,7 @@ mongoose.connect(process.env.MONGODB_URI,
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
-  .then(() => {
+  .then( async () => {
     console.log('DATABASE CONNECTED');
   })
   .catch(err => console.error("Error connecting to mongo", err));
@@ -34,19 +35,20 @@ app.use((req, res, next) => {
 	next();
 });
 
-io.on('connection', socket => {
+io.on('connection', async socket => {
   const id = socket.handshake.query.id
   socket.join(id)
 
-  socket.on('send-message', ({ recipients, text }) => {
-    recipients.forEach(recipient => {
-      const newRecipients = recipients.filter(r => r !== recipient)
-      newRecipients.push(id)
-      socket.broadcast.to(recipient).emit('receive-message', {
-        recipients: newRecipients, sender: id, text
-      })
-    })
-  })
+  socket.emit("queries", await Message.aggregate(
+    [
+        { "$match": {} },
+        { "$group": {
+          "_id":"$roomId",
+          "message": { "$first": "$message" },
+          "userId": {"$first": "$userId"}
+        }}
+    ],))
+
 })
 
 app.use(login);
