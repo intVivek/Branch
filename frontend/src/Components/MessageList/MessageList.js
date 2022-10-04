@@ -3,7 +3,7 @@ import React,{useEffect, useState} from "react";
 import { useSocket } from '../../Context/SocketProvider';
 import MessageCard from "../MessageCard";
 
-const MessageList = () => {
+const MessageList = (props) => {
     const socket = useSocket();
     const [list, setList] = useState([]);
 
@@ -16,7 +16,13 @@ const MessageList = () => {
 
     return <div className="messageList">
         {list.map((user,i)=> {
-            return <MessageCard key={i} roomId={user._id} lastMessage={user.message} userId={user.userId}/>
+            return <MessageCard 
+                key={i}
+                roomId={user._id}
+                lastMessage={user.message}
+                userId={user.userId}
+                setRoomClicked={props.setRoomClicked}
+            />
         })}
     </div>;
 };

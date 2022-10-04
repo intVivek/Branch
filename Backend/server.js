@@ -39,6 +39,14 @@ io.on('connection', async socket => {
   const id = socket.handshake.query.id
   socket.join(id)
 
+  socket.on("join",async (roomId) => {
+      socket.join(roomId);
+      const msg = await Message.find(roomId);
+      console.log(msg);
+      socket.emit("getallmessages",msg);
+    }
+  )
+
   socket.emit("queries", await Message.aggregate(
     [
         { "$match": {} },

@@ -5,12 +5,13 @@ import ChatBox from "../../Components/ChatBox";
 import { SocketProvider } from '../../Context/SocketProvider';
 
 const Dashboard = () => {
-  const [user, setUser] = useState(localStorage.getItem('User'));
+  const [user,] = useState(localStorage.getItem('User'));
+  const [roomClicked, setRoomClicked] = useState("");
   return (
     <SocketProvider id={user.id}>
       <div className="dashboard">
-        <MessageList/>
-        <ChatBox/>
+        <MessageList setRoomClicked={setRoomClicked}/>
+        {roomClicked && <ChatBox roomClicked={roomClicked}/>}
       </div>
     </SocketProvider>
   );
