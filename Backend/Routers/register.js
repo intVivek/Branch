@@ -3,6 +3,7 @@ const router = express.Router();
 const validator = require('validator');
 const User = require("../Model/User.js");
 const bcrypt = require('bcrypt');
+const { v4: uuidv4 } = require('uuid');
 
 router.post('/register', async (req, res) => {
     console.log(req.body);
@@ -13,8 +14,12 @@ router.post('/register', async (req, res) => {
     try{
         user = await User.findOne({email});
         if (user) return res.json({status:0,message:'User already exists'});
-        user = await User.create({ email, name, hashedPass: await bcrypt.hash(pass, 10)});
-        return res.json({status:1,message:'User created',user:{name:user.name,email:user.email}});
+        user = await User.create({ id: uuidv4().substring(0,8), email, name, agent: true, hashedPass: await bcrypt.hash(pass, 10)});
+        return res.json({status:1,message:'User created',user:{
+                id: user.id,
+                name:user.name,
+                email:user.email}}
+        );
     }
     catch(error){
         console.log(error);

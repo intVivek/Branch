@@ -20,6 +20,7 @@ const Login = () => {
             localStorage.setItem('user', JSON.stringify(res))
             if(res.status==1) {
                 toast.success(res.message);
+                localStorage.setItem('User', JSON.stringify(res.user));
                 navigate('/dashboard');
             }
             else toast.error(res.message);
