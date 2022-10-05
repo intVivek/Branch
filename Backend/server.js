@@ -43,9 +43,7 @@ io.on('connection', async socket => {
   socket.join(id)
 
   socket.on("join",async (user) => {
-      console.log(user);
       socket.join(user.roomId);
-      console.log(room);
       if(room[user.roomId] && room[user.roomId].agent){
         const agent = await User.find({id: room[user.roomId].agent});
         socket.emit("agent", agent[0]);
@@ -57,7 +55,8 @@ io.on('connection', async socket => {
         if(!room[user.roomId].agent){
           room[user.roomId].agent = user.agent;
         }
-        const msg = await Message.find({roomId: user.roomId});
+        const msg = await Message.find({roomId: user.roomId}).sort({createdAt: 1});
+        console.log(msg);
         socket.emit("getallmessages",msg);
       }
     }

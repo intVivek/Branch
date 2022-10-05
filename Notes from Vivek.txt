@@ -1,0 +1,28 @@
+Hi,
+All the features that the App supports
+
+1. Login/Register (No Authentication).
+2. Multiple Agents can respond to incoming questions sent by customers (Implemented by Socket.io).
+3. If an agent picks a customer other agents cannot pick the same customer.
+
+Technologies used -->
+Backend  : Node.js, Express.js, Socket.io.
+Frontend : React.js, Javascript, Scss
+Database : MongoDb
+
+*Do note that this app is just build under 2 days and there are a lot of things that can be improved.
+
+All the screenshots are included in Screenshots folder
+
+Live Here --> https://branchassignment.netlify.app
+Github (Private) --> https://github.com/intVivek/Branch
+
+
+How to Setup locally-->
+
+Frontend: 
+Go to frontend folder-> open terminal -> type: npm i => type: npm start
+
+Backend: 
+Go to Backend folder-> Add your Mongo URI in .env file ->
+open terminal -> type: npm i -> type: npm start

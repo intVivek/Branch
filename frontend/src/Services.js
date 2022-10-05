@@ -1,4 +1,5 @@
-const baseUrl = 'http://localhost:5000';
+const baseUrl = process.env.REACT_APP_API_URL;
+console.log(baseUrl);
 
 export function login (body) {
 	return callPost(baseUrl + '/login', body);
@@ -8,9 +9,9 @@ export function register (body) {
 	return callPost(baseUrl + '/register', body);
 }
 
-const callGet = (url) => {
-	return fetch(url).then(handleres);
-};
+// const callGet = (url) => {
+// 	return fetch(url).then(handleres);
+// };
 
 
 const callPost = (url, body) => {
