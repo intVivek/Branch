@@ -2,7 +2,7 @@ import "./login.scss"
 import React,{useState} from "react";
 import {TextField, Button} from '@mui/material';
 import { login } from '../../../Services';
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
 import {useNavigate} from 'react-router-dom';
 
 const Login = () => {

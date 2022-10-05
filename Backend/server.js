@@ -5,6 +5,7 @@ const server = require('http').createServer(app);
 const {login, register} = require('./Routers');
 const mongoose = require("mongoose");
 const Message = require("./Model/Message");
+const User = require("./Model/User");
 const io = require('socket.io')(server,{
   cors:
   {
@@ -34,21 +35,36 @@ app.use((req, res, next) => {
 	next();
 });
 
+var room = {};
 io.on('connection', async socket => {
+  
+
   const id = socket.handshake.query.id
   socket.join(id)
 
-  socket.on("join",async (roomId) => {
-      socket.join(roomId);
-      const msg = await Message.find(roomId);
-      socket.emit("getallmessages",msg);
+  socket.on("join",async (user) => {
+      console.log(user);
+      socket.join(user.roomId);
+      console.log(room);
+      if(room[user.roomId] && room[user.roomId].agent){
+        const agent = await User.find({id: room[user.roomId].agent});
+        socket.emit("agent", agent[0]);
+      }
+      else{
+        if(!room[user.roomId]){
+          room[user.roomId] = {client: user.client, agent: user.agent};
+        }
+        if(!room[user.roomId].agent){
+          room[user.roomId].agent = user.agent;
+        }
+        const msg = await Message.find({roomId: user.roomId});
+        socket.emit("getallmessages",msg);
+      }
     }
   )
   socket.on("sendMessage", async ({message,roomId,userId})=>{
-    console.log({message,roomId,userId});
     if(message){
       const msg = await Message.create({message,roomId,userId});
-      console.log(msg);
       socket.emit("reciveMessage",msg);
     }
   })

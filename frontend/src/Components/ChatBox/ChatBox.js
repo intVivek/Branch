@@ -13,8 +13,8 @@ const ChatBox = (props) => {
     const [messages, setMessages] = useState();
 
     useEffect(()=>{
-        console.log("useEffect");
-        socket.emit('join', {roomId: props.roomClicked});
+        console.log(props);
+        socket.emit('join', {...props.roomClicked,agent: props.user.id});
         socket.on('getallmessages',(data)=>{
             setMessages([...data]);
             console.log(data);
@@ -24,13 +24,13 @@ const ChatBox = (props) => {
                 return [...prev,msg];
             })
         })
-    },[])
+    },[props.roomClicked, socket])
 
 
 
     const handleSendMessage=()=>{
         const userId = JSON.parse(localStorage.getItem('User')).id;
-        socket.emit('sendMessage', {message, roomId: props.roomClicked, userId});
+        socket.emit('sendMessage', {message, roomId: props.roomClicked.roomId, userId});
         setMessage("");
     }
 
