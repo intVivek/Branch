@@ -1,3 +1,15 @@
-.charBox{
-    flex-grow: 1; height: 100%;
+.chatBox{
+    width: calc(100% - 500px); height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    >.sendMessage{
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 10px;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
 }

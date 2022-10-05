@@ -3,21 +3,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
 
-.window{
-    width: 30%; height: 60%;
-    border-radius: 20px;
-    border: 1px solid rgb(208, 208, 208);
-    box-shadow: 1px 2px 13px 1px #e7e7e7;
-    overflow: hidden;
-}
+    >.window{
+        width: 30%; height: 60%;
+        border-radius: 20px;
+        border: 1px solid rgb(208, 208, 208);
+        box-shadow: 1px 2px 13px 1px #e7e7e7;
+        overflow: hidden;
 
-.modal{
-    flex-grow: 1;
-    width: 100%;
-    height: calc(100% - 48px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+        >.modal{
+            flex-grow: 1;
+            width: 100%;
+            height: calc(100% - 48px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
 }

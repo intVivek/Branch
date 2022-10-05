@@ -16,7 +16,6 @@ const io = require('socket.io')(server,{
 app.use(express.urlencoded({ extended : false }));
 app.use(express.json());
 app.set("trust proxy", 1);
-
 mongoose.connect(process.env.MONGODB_URI,  
     {
       useNewUrlParser: true,
@@ -42,10 +41,17 @@ io.on('connection', async socket => {
   socket.on("join",async (roomId) => {
       socket.join(roomId);
       const msg = await Message.find(roomId);
-      console.log(msg);
       socket.emit("getallmessages",msg);
     }
   )
+  socket.on("sendMessage", async ({message,roomId,userId})=>{
+    console.log({message,roomId,userId});
+    if(message){
+      const msg = await Message.create({message,roomId,userId});
+      console.log(msg);
+      socket.emit("reciveMessage",msg);
+    }
+  })
 
   socket.emit("queries", await Message.aggregate(
     [
