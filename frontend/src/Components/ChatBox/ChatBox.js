@@ -8,13 +8,12 @@ import SendIcon from '@mui/icons-material/Send';
 
 const ChatBox = (props) => {
     const socket = useSocket();
-    // console.log(localStorage.getItem('User'));
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState();
 
     useEffect(()=>{
         console.log(props);
-        socket.emit('join', {...props.roomClicked,agent: props.user.id});
+        socket.emit('join', {room: props.roomClicked.roomId, user: props.roomClicked.roomId, agent: props.user.id});
         socket.on('getallmessages',(data)=>{
             setMessages([...data]);
             console.log(data);
@@ -30,7 +29,7 @@ const ChatBox = (props) => {
 
     const handleSendMessage=()=>{
         const userId = JSON.parse(localStorage.getItem('User')).id;
-        socket.emit('sendMessage', {message, roomId: props.roomClicked.roomId, userId});
+        socket.emit('sendMessage', {message, room: props.roomClicked.roomId, user: userId});
         setMessage("");
     }
 

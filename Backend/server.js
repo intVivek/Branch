@@ -4,8 +4,9 @@ require("dotenv").config();
 const server = require('http').createServer(app);
 const {login, register} = require('./Routers');
 const mongoose = require("mongoose");
-const Message = require("./Model/Message");
 const User = require("./Model/User");
+const Message = require("./Model/Message");
+
 const io = require('socket.io')(server,{
   cors:
   {
@@ -27,7 +28,6 @@ mongoose.connect(process.env.MONGODB_URI,
   })
   .catch(err => console.error("Error connecting to mongo", err));
 
-
 app.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
 	res.setHeader('Access-Control-Allow-Headers', 'content-type,Authorization');
@@ -35,48 +35,52 @@ app.use((req, res, next) => {
 	next();
 });
 
-var room = {};
+let roomMap = {};
 io.on('connection', async socket => {
   
-
   const id = socket.handshake.query.id
   socket.join(id)
 
   socket.on("join",async (user) => {
-      socket.join(user.roomId);
-      if(room[user.roomId] && room[user.roomId].agent){
-        const agent = await User.find({id: room[user.roomId].agent});
+      socket.join(user.room);
+      console.log("u",user);
+      if(roomMap[user.room] && roomMap[user.room].agent){
+        const agent = await User.find({id: roomMap[user.room].agent});
         socket.emit("agent", agent[0]);
       }
       else{
-        if(!room[user.roomId]){
-          room[user.roomId] = {client: user.client, agent: user.agent};
+        if(!roomMap[user.room]){
+          roomMap[user.room] = {client: user.user, agent: user.agent};
         }
-        if(!room[user.roomId].agent){
-          room[user.roomId].agent = user.agent;
+        if(!roomMap[user.room].agent){
+          roomMap[user.room].agent = user.agent;
         }
-        const msg = await Message.find({roomId: user.roomId}).sort({createdAt: 1});
-        console.log(msg);
+        const msg = await Message.find({room: user.room}).populate('user').sort({createdAt: 1});
         socket.emit("getallmessages",msg);
       }
     }
   )
-  socket.on("sendMessage", async ({message,roomId,userId})=>{
+  socket.on("sendMessage", async ({message,room,user})=>{
     if(message){
-      const msg = await Message.create({message,roomId,userId});
+      const msg = await Message.create({message,room,user});
       socket.emit("reciveMessage",msg);
     }
+  })
+
+  socket.on("removeAgent", ({room}) => {
+    console.log(room, roomMap, roomMap[room.roomId]);
+    delete roomMap[room.roomId];
   })
 
   socket.emit("queries", await Message.aggregate(
     [
         { "$match": {} },
         { "$group": {
-          "_id":"$roomId",
+          "_id":"$room",
           "message": { "$first": "$message" },
-          "userId": {"$first": "$userId"}
+          "user": {"$first": "$user"}
         }}
-    ],))
+    ], ))
 
 })
 

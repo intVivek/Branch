@@ -1,13 +1,13 @@
 const { Schema, model } = require("mongoose");
 
 const messageSchema = new Schema({
-    userId: {
+    user: {
       type: String,
-      required: true,
+      ref: "User",
     },
-    roomId:{
+    room: {
         type: String,
-        required: true,
+        ref: "Room",
     },
     message: {
         type: String,

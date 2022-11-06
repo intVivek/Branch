@@ -7,7 +7,7 @@ const ChatList =({messages})=>{
     return(
         <div className="chatList">
             {messages&&messages.map((message,i)=>{
-                console.log(message.userId,user.id)
+                console.log(message.user,user.id)
                 return <div className="chat" style={
                     {
                         alignSelf: message.userId===user.id?"flex-end":"flex-start",

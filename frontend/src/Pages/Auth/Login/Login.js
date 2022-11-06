@@ -16,7 +16,6 @@ const Login = () => {
         setLoading(true);
         login({ email, pass })
         .then(res => {
-            console.log(res)
             localStorage.setItem('user', JSON.stringify(res))
             if(res.status==1) {
                 toast.success(res.message);

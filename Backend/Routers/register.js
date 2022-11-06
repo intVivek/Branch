@@ -14,9 +14,9 @@ router.post('/register', async (req, res) => {
     try{
         user = await User.findOne({email});
         if (user) return res.json({status:0,message:'User already exists'});
-        user = await User.create({ id: uuidv4().substring(0,8), email, name, agent: true, hashedPass: await bcrypt.hash(pass, 10)});
+        user = await User.create({ _id: uuidv4().substring(0,8), email, name, agent: true, hashedPass: await bcrypt.hash(pass, 10)});
         return res.json({status:1,message:'User created',user:{
-                id: user.id,
+                id: user._id,
                 name:user.name,
                 email:user.email}}
         );

@@ -13,7 +13,7 @@ const Dashboard = () => {
   return (
     <SocketProvider id={user.id}>
       <div className="dashboard">
-        <MessageList setRoomClicked={setRoomClicked}/>
+        <MessageList roomClicked={roomClicked} setRoomClicked={setRoomClicked}/>
         {roomClicked.roomId && <ChatBox user={user} roomClicked={roomClicked}/>}
       </div>
     </SocketProvider>
